@@ -72,6 +72,34 @@ function create() {
   game.time.events.loop(1000, updateTimer, game);
 }
 
+// Update state
+function update() {
+  // Move catcher
+  if (cursors.left.isDown && catcher.position.x > 0) {
+    // Move left
+    catcher.body.velocity.x = -catcherSpeed;
+  } else if (cursors.right.isDown && catcher.position.x < width) {
+    // Move Right
+    catcher.body.velocity.x = catcherSpeed;
+  } else {
+    // Stand still
+    catcher.body.velocity.x = 0;
+  }
+
+  // Check triangles
+  for (var i in triangles.children) {
+    var triangle = triangles.children[i];
+    // Increase speed if less than max
+    if (triangle.body.velocity.y < maxTriangleSpeed) {
+      triangle.body.velocity.y += 20;
+    }
+    // Destroy triangles that fall thru bottom
+    if (triangle.position.y > height + 50) {
+      triangle.destroy();
+    }
+  }
+}
+
 // triangles
 function spawnTriangle() {
   // Spawn triangle at random location at top
