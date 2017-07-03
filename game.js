@@ -68,6 +68,43 @@ function create() {
 
   // Add timer display for countdown
   timer = game.add.text(10, 10, gameDuration, { fontsize: "24px" } );
-  // Timer logic - 1 second tick
+  // Set loop timer with 1 second tick
   game.time.events.loop(1000, updateTimer, game);
+}
+
+// triangles
+function spawnTriangle() {
+  // Spawn triangle at random location at top
+  var x = Math.random() * width;
+  // Initialize triangle
+  var triangle = game.add.sprite(x, height*0.1, 'triangle');
+  // Add physics
+  game.physics.p2.enable(triangle, showBodies);
+  // Remove default shape
+  triangle.body.clearShapes();
+  // Add physics body polygon
+  triangle.body.loadPolygon('physics', 'triangle');
+  // Move triangle downwards
+  triangle.body.moveDown(maxTriangleSpeed);
+  // Add to group
+  triangles.add(triangle);
+}
+
+// Timer logic
+function updateTimer() {
+  // Increment current Timer
+  currentTime++;
+  // Update display
+  timer.setText(gameDuration - currentTime);
+
+  // Check if time run out
+  if (currentTime == gameDuration) {
+    // Get score
+    var score = triangles.children.length;
+    // Update scoreboard
+    var txt = game.add.text(width*0.5, height*0.5, score, { fontsize: "40px" });
+    txt.anchor.set(0.5);
+    // Stop game
+    game.paused = true;
+  }
 }
